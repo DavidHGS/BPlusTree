@@ -418,6 +418,41 @@ bool BPlusTree::search(int nkey)
     return false;
 }
 
+bool BPlusTree::Update(int nkey,double number){
+    //向下直到找到叶子节点
+
+    int i = 0;
+    //树上没有节点
+
+    if (!m_pRoot)
+        printf("Update failed!\n");
+        return false;
+    Node *pTmp = m_pRoot;
+    while (!pTmp->m_bLeaf)
+    {
+        for (i = 0; i < pTmp->m_nkeynum; i++)
+        {
+            if (nkey < ((InternalNode *)pTmp)->internalNodeData->m_keys[i])
+            {
+                break; //可修改为二分查找
+            }
+        }
+        pTmp = (Node *)(((InternalNode *)pTmp)->internalNodeData->m_pointers[i]);
+    }
+
+    auto *leafNode = (LeafNode *)pTmp;
+    for (i = 0; i < leafNode->m_nkeynum; i++)
+    {
+        if (nkey == leafNode->leafNodeData->m_keys[i])
+        {
+            leafNode->leafNodeData->m_number[i]=number;
+            return true;
+        }
+    }
+    printf("Update failed!\n");
+    return false;
+}
+
 void BPlusTree::PrintLayerTree()
 {
     int i = 0;

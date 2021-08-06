@@ -87,9 +87,11 @@ private:
 public:
     bool Insert(int nkey,double number);//叶子节点插入
     bool Remove(int nkey);//删除
+    bool Update(int nkey,double number);//修改卫星节点数据
+    bool search(int nkey);//查找某个值是否存在
     bool InsertKeyAndPointer(Node *pParent,Node *pOld,int nKey,Node *pNew);//内部节点插入
     void PrintLeaves();//打印叶子节点值
-    bool search(int nkey);//查找某个值是否存在
+    
     void PrintLayerTree();//分层打印树
     BPlusTree(/* args */);
     ~BPlusTree();
