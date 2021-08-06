@@ -1,7 +1,7 @@
 #pragma once
 //只编译一次，会有版本兼容的风险
 
-#define LEAF_ORDER 3
+#define LEAF_ORDER 4
 #define ORDER 4
 #define MAX_NUM 5
 
@@ -12,7 +12,7 @@ using namespace std;
 
 
 /*
-    使用a型BPlus树，即第i颗子树的关键字都小于第i个关键字，
+    第i颗子树的关键字都小于第i个关键字，
     关键字和子树的索引都从0开始的
 */
 
