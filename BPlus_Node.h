@@ -18,13 +18,13 @@ using namespace std;
 
 
 
-//40byte的非叶节点
+//非叶节点
 struct InternalNodeData{
     //键值数组，指针数组
     int m_keys[ORDER];
     void *m_pointers[MAX_NUM];
 };
-
+//叶子节点
 struct LeafNodeData{
     int m_keys[LEAF_ORDER];
     double m_number[LEAF_ORDER];
