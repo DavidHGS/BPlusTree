@@ -4,8 +4,8 @@ using namespace std;
 /******************节点***************/
 Node::Node(/* args */)
 {
-    m_nkeynum=0;
-    m_bLeaf=false;
+    m_nkeynum = 0;
+    m_bLeaf = false;
 }
 
 Node::~Node()
@@ -15,12 +15,14 @@ Node::~Node()
 /******************内部节点***************/
 InternalNode::InternalNode(/* args */)
 {
-    internalNodeData=new struct InternalNodeData;
-    for(int &m_key : internalNodeData->m_keys){
-        m_key=0;//初始化内部节点关键字
+    internalNodeData = new struct InternalNodeData;
+    for (int &m_key : internalNodeData->m_keys)
+    {
+        m_key = 0; //初始化内部节点关键字
     }
-    for(int i=0;i<LEAF_ORDER;i++){
-        internalNodeData->m_pointers[i]=nullptr;
+    for (int i = 0; i < LEAF_ORDER; i++)
+    {
+        internalNodeData->m_pointers[i] = nullptr;
     }
 }
 
@@ -30,14 +32,16 @@ InternalNode::~InternalNode()
 /******************叶子节点***************/
 LeafNode::LeafNode(/* args */)
 {
-    leafNodeData=new struct LeafNodeData;
-    for(int i=0;i<ORDER;i++){
-        leafNodeData->m_keys[i]=0;
+    leafNodeData = new struct LeafNodeData;
+    for (int i = 0; i < ORDER; i++)
+    {
+        leafNodeData->m_keys[i] = 0;
     }
-    for(int i=0;i<ORDER;i++){
-        leafNodeData->m_number[i]=0.0;
+    for (int i = 0; i < ORDER; i++)
+    {
+        leafNodeData->m_number[i] = 0.0;
     }
-    leafNodeData->next=nullptr;
+    leafNodeData->next = nullptr;
 }
 
 LeafNode::~LeafNode()
@@ -80,7 +84,7 @@ bool BPlusTree::Insert(int nkey, double number)
     //当前节点不是叶子节点,向下寻找
     while (!pTmp->m_bLeaf)
     {
-        for (int i = 0; i < pTmp->m_nkeynum; i++)
+        for (i = 0; i < pTmp->m_nkeynum; i++) //注意整体i和局部i
         {
             if (nkey < ((InternalNode *)pTmp)->internalNodeData->m_keys[i])
                 break;
@@ -89,7 +93,7 @@ bool BPlusTree::Insert(int nkey, double number)
             pTmp = (Node *)(((InternalNode *)pTmp)->internalNodeData->m_pointers[0]);
         else
         {
-            pTmp = (Node *)(((InternalNode *)pTmp)->internalNodeData->m_pointers[1]);
+            pTmp = (Node *)(((InternalNode *)pTmp)->internalNodeData->m_pointers[i]);
         }
     }
 
@@ -153,7 +157,7 @@ bool BPlusTree::Insert(int nkey, double number)
         pTmpKeys[m] = ((LeafNode *)pTmp)->leafNodeData->m_keys[m];
         pTmpnumbers[m] = ((LeafNode *)pTmp)->leafNodeData->m_number[m];
         double x = ((LeafNode *)pTmp)->leafNodeData->m_number[m];
-        double y = pTmpnumbers[m]; //m=i-1
+        double y = pTmpnumbers[m]; //m=i
     }
     pTmpKeys[i] = nkey;
     pTmpnumbers[i] = number;
@@ -161,7 +165,7 @@ bool BPlusTree::Insert(int nkey, double number)
     //新建叶子节点用于分裂(复制pTmp)
     auto *pNew = new LeafNode;
 
-    for (m = 0, i = nMid; i < LEAF_ORDER + 1; i++, m++)
+    for (m = 0, i = nMid; i < LEAF_ORDER + 1; i++, m++) //pNew作为新建的右节点
     {
         pNew->leafNodeData->m_keys[m] = pTmpKeys[i];
         pNew->leafNodeData->m_number[m] = pTmpnumbers[i];
@@ -205,7 +209,7 @@ void BPlusTree::PrintLeaves()
     printf("*****************print leaves****************\n");
     while (1)
     {
-        for (int i = 0; i < pCur->m_nkeynum; i++)
+        for (i = 0; i < pCur->m_nkeynum; i++)
         {
             printf("<key:%d,number%lf\n", pCur->leafNodeData->m_keys[i], pCur->leafNodeData->m_number[i]);
         }
@@ -231,7 +235,7 @@ bool BPlusTree::InsertKeyAndPointer(Node *pParent, Node *pOld, int nkey, Node *p
     int m = 0;
     int k = 0;
 
-    //父节点不存在，就是根节点的父亲
+    //父节点不存在，pNewRoot就是根节点的父亲,成为新的根
     if (pParent == nullptr)
     {
         //产生新根节点
@@ -254,11 +258,9 @@ bool BPlusTree::InsertKeyAndPointer(Node *pParent, Node *pOld, int nkey, Node *p
     {
         //不可以添加重复的值
         if (nkey == ((InternalNode *)pParent)->internalNodeData->m_keys[i])
-            ;
-        return false;
+            return false;
         if (nkey < ((InternalNode *)pParent)->internalNodeData->m_keys[i])
-            ;
-        break;
+            break;
     }
 
     //判断父节点是否已经满了
@@ -418,15 +420,18 @@ bool BPlusTree::search(int nkey)
     return false;
 }
 
-bool BPlusTree::Update(int nkey,double number){
+bool BPlusTree::Update(int nkey, double number)
+{
     //向下直到找到叶子节点
 
     int i = 0;
     //树上没有节点
 
     if (!m_pRoot)
+    {
         printf("Update failed!\n");
         return false;
+    }
     Node *pTmp = m_pRoot;
     while (!pTmp->m_bLeaf)
     {
@@ -445,7 +450,7 @@ bool BPlusTree::Update(int nkey,double number){
     {
         if (nkey == leafNode->leafNodeData->m_keys[i])
         {
-            leafNode->leafNodeData->m_number[i]=number;
+            leafNode->leafNodeData->m_number[i] = number;
             return true;
         }
     }

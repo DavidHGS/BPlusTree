@@ -1,7 +1,7 @@
 #pragma once
 //只编译一次，会有版本兼容的风险
 
-#define LEAF_ORDER 4
+#define LEAF_ORDER 3
 #define ORDER 4
 #define MAX_NUM 5
 
@@ -18,13 +18,13 @@ using namespace std;
 
 
 
-//非叶节点内部结构
+//40byte的非叶节点
 struct InternalNodeData{
     //键值数组，指针数组
     int m_keys[ORDER];
     void *m_pointers[MAX_NUM];
 };
-//叶子节点内部结构
+
 struct LeafNodeData{
     int m_keys[LEAF_ORDER];
     double m_number[LEAF_ORDER];
@@ -79,12 +79,13 @@ public:
 class BPlusTree
 {
 private:
-    //根节点
-    Node *m_pRoot;
+  
     //第一个叶子节点
     Node *m_pFirst;
     Node *m_pLast;
 public:
+    //根节点
+    Node *m_pRoot;
     bool Insert(int nkey,double number);//叶子节点插入
     bool Remove(int nkey);//删除
     bool Update(int nkey,double number);//修改卫星节点数据
