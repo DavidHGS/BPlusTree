@@ -65,7 +65,6 @@ Node *Deserialize(char *path, long long leafCount, long long internalCount)
     if (leafCount == 0)
         return NULL; //没有叶子节点，说明树为空
     Node *pRoot, *pTmp;
-    ;
     FILE *fp = fopen(path, "rb");
     InternalNode inNodes[] = {};
 
