@@ -1,6 +1,5 @@
 #include "BPlus_Node.h"
 #include <queue>
-using namespace std;
 
 bool Serialize(Node *m_pRoot, char *path, long long *leafCount, long long *internalCount)
 {
